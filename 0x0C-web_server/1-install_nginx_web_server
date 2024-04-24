@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Install nginx with the -y flag to auto-confirm installation
 apt-get update
@@ -18,8 +18,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Check if curl returns "Hello World!" from nginx root
-curl -s localhost | grep "Hello World!" > /dev/null
-if [ $? -ne 0 ]; then
+response=$(curl -s localhost)
+if [[ "$response" != *"Hello World!"* ]]; then
     echo "Nginx root does not return 'Hello World!'"
     exit 1
 fi
