@@ -1,8 +1,25 @@
 #!/usr/bin/env bash
-# installs nginx and configures it on a remote server
 
-apt-get -y update
-apt-get -y install nginx
-ufw allow 'Nginx HTTP'
-echo 'Hello World!' > /var/www/html/index.nginx-debian.html
-service nginx start
+# Install nginx with the -y flag to auto-confirm installation
+apt-get update
+apt-get install -y nginx
+
+# Start nginx
+/usr/sbin/nginx
+
+# Create a temporary index.html file with "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
+
+# Check if nginx is listening on port 80
+netstat -tnl | grep ':80' > /dev/null
+if [ $? -ne 0 ]; then
+    echo "Nginx is not listening on port 80"
+    exit 1
+fi
+
+# Check if curl returns "Hello World!" from nginx root
+curl -s localhost | grep "Hello World!" > /dev/null
+if [ $? -ne 0 ]; then
+    echo "Nginx root does not return 'Hello World!'"
+    exit 1
+fi
